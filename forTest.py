@@ -1,3 +1,4 @@
+# 파이썬 코드 테스트를 위한 파일
 n = int(input())
 A = list(map(int, (input().split())))
 
