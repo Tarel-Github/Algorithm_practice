@@ -1,18 +1,26 @@
 n = int(input())
-count = 1           # 리턴해야할 값, 총 몇 종류가 나오는가?
-start_index = 1
-end_index = 1
-sum = 1             # 더하는 값 저장
+A = list(map(int, (input().split())))
 
-while end_index != n:
-    if sum == n:        # 정답인 경우
+A.sort()
+count = 0
+i = 0
+j = n-1 # 끝부분 인덱스가 마지막 번호에서 시작
+tg = 0
+
+while tg < n:
+    if A[i] + A[j] > A[tg]:
+        j -= 1
+    elif A[i] + A[j] < A[tg]:
+        i += 1
+    else:   # 정답인 경우
+        tg += 1
         count += 1
-        end_index += 1
-    elif sum > n:       # 두 포인터 사이 값을 전부 더했을 때, n보다 크다면
-        sum -= start_index  # 
-        start_index += 1    # 스타트 값을 올린다.
-    else:               # 두 포인터 사이 값이 n보다 작다면(초반부에 주로 발생)
-        end_index += 1
-        sum += end_index
+        i = 0
+        j = n-1
+    
+    if j == 0:  # 없는 경우
+        tg += 1
+        i = 0
+        j = n-1
 
 print(count)
