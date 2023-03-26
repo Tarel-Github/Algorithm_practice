@@ -1,13 +1,17 @@
 # 파이썬 코드 테스트를 위한 파일
-from collections import deque
-N = int(input()) # 카드 수 입력
-myQueue = deque()
+N = list(input())
 
-for i in range(N):
-    myQueue.append(i+1)
+for i in range(len(N)):
+    max = i
+    for j in range(i+1, len(N)): # 최댓값 찾기
+        if N[j] > N[max]:
+            max = j# 최댓값이 위치한 인덱스
+    if N[i] < N[max]:
+        temp = N[i]
+        N[i] = N[max]
+        N[max] = temp
 
-while len(myQueue):
-    myQueue.popleft()
-    myQueue.append(myQueue.popleft())
+for i in range(len(N)):
+    print(N[i])
 
-print(myQueue[0])
+
