@@ -1,13 +1,27 @@
 import sys
+sys.setrecursionlimit(10000)
 input = sys.stdin.readline
 
-N = int(input())
-count =[0] * 10001
+n, m = map(int, input().split())
+A = [[] for _ in range(n + 1)]
+visited = [False] * (n + 1)
 
-for i in range(N):
-    count[int(input())] += 1
+def DFS(v):
+    visited[v] = True
+    for i in A[v]:
+        if not visited[i]:
+            DFS(i)
 
-for i in range(10001):
-    if count[i] != 0:
-        for _ in range(count[i]):
-            print(i)
+for _ in range(m):
+    s, e = map(int, input().split())
+    A[s].append(e)
+    A[e].append(s)
+
+count = 0
+
+for i in range(1,n+1):
+    if not visited[i]:
+        count += 1
+        DFS(i)
+
+print(count)
