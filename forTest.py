@@ -1,34 +1,43 @@
-a, b, c = map(int, input().split())
+import sys
+from collections import deque
+input = sys.stdin.readline()
 
-def gcd(a,b):           # 최대 공약수 구하는 알고리즘
-    if b == 0:
-        return a
-    else:
-        return gcd(b, a % b)
-
-def Execute(a, b):
-    ret = [0] * 2               # [0,0] 배열을 만듦
-    if b == 0:                  # ax+by=c 식에서 bx가 0이 되는 경우로 이때는 [1, 0]만 하고 바로 리턴
-        ret[0] = 1              # 단, 재귀로 돌아온 경우, a % b가 0이면 이쪽으로 온다.
-        ret[1] = 0
-        return ret
-    q = a // b
-    v = Execute(b, a % b)       # b와 ab최.공을 넣고 다시 재귀 시작, 어느순간 [1, 0]을 반환받는 순간이 있다.
-    ret[0] = v[1]
-    ret[1] = v[0] - v[1] * q
-    return ret
+N, M, K, X = map(int, input().split()) # 도시수, 도로수, 구할 거리, 출발 도시 번호
+A = [[] for _ in range(N+1)]        # 0번 인덱스는 버리기 때문에 N+1번 수행
+answer = []
+visited = [-1] * (N + 1)            # 0번 인덱스는 버리는듯 함
 
 
-mgcd = gcd(a, b)        # 최대공약수를 구해옴
+# BFS 탐색 함수
+def BFS(v):
+    queue = deque()
+    queue.append(v)         # 큐에 출발도시번호 삽입
+    visited[v] += 1         # 출발 도시는 0으로 변경, 나머지는 -1
+    while queue:
+        now_Node = queue.popleft()      # 큐에서 왼쪽 값을 빼고 now_Node에 삽입
+        for i in A[now_Node]:           # 예를들어, A[1]가 [1, 2, 3] 이면 1, 2, 3 순차로 가져옴
+            if visited[i] == -1:        # 방문한 적이 없다면
+                visited[i] = visited[now_Node] + 1  # 잘 모르겠음
+                queue.append(i)
 
-if c % mgcd != 0:       # c가 최대공약수로 안 나뉘어지면 불가능 리턴
+# 노드 연결 정보를 입력받고 A배열의 S번째 인덱스에 E를 넣는다.
+for _ in range(M):
+    S, E =map(int, int().split())
+    A[S].append(E)
+
+BFS(X)              # 출발 도시 번호로 BFS 탐색 시작
+
+
+for i in range(N + 1):
+    if visited[i] == K:
+        answer.append(i)
+
+if not answer:
     print(-1)
 else:
-    mok = int(c / mgcd)               # mok은 C/최.공
-    ret = Execute(a, b)
-    print(ret[0] * mok, end = ' ')
-    print(ret[1] * mok)
-
+    answer.sort()
+    for i in answer:
+        print(i)
 
 '''
 
