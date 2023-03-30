@@ -1,14 +1,21 @@
-N, K = map(int, input().split())
-A = [0] *N
+import math
 
-for i in range(N):
-    A[i] = int(input())
+N = int(input())
+result = N
 
-count = 0
+for p in range(2, int(math.sqrt(N)) + 1):
+    if N % p == 0:
+        result -= result / p
+        while N % p == 0:
+            N /= p
 
-for i in range(N - 1, -1, -1):
-    if A[i] <= K:
-        count += int(K/A[i])
-        K = K % A[i]
+if N > 1:
+    result -= result / N
 
-print(count)
+print(int(result))
+
+'''
+
+
+
+'''
