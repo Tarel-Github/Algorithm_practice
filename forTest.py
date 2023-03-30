@@ -1,26 +1,35 @@
-import math
+a, b, c = map(int, input().split())
 
-N = int(input())                # N과 서로소인 자연수의 개수를 구해야 함
-result = N
+def gcd(a,b):           # 최대 공약수 구하는 알고리즘
+    if b == 0:
+        return a
+    else:
+        return gcd(b, a % b)
 
-for p in range(2, int(math.sqrt(N)) + 1):   #에라토스테네스처럼 제곱근까지만 진행,P는 2부터 N의 제곱근이다. 99 기준 9까지
-    if N % p == 0:                  # p가 N의 소인수(p로 N나눈 나머지가 0)라면
-        result -= result / p        # 결과값(최대값)에서 p로 나누어 떨어지는는 수를 result에서 뺀다.(result / p 는, 결국 result를 p로 나눌 수 있는 숫자를 말한다.)
-                # 만약 10 / 2이면 2, 4, 6, 8, 10 총 5개다. // 만약 15 / 3이면 3, 6, 9, 12, 15 총 5개다.
+def Execute(a, b):
+    ret = [0] * 2               # [0,0] 배열을 만듦
+    if b == 0:                  # ax+by=c 식에서 bx가 0이 되는 경우로 이때는 [1, 0]만 하고 바로 리턴
+        ret[0] = 1              # 단, 재귀로 돌아온 경우, a % b가 0이면 이쪽으로 온다.
+        ret[1] = 0
+        return ret
+    q = a // b
+    v = Execute(b, a % b)       # b와 ab최.공을 넣고 다시 재귀 시작, 어느순간 [1, 0]을 반환받는 순간이 있다.
+    ret[0] = v[1]
+    ret[1] = v[0] - v[1] * q
+    return ret
 
-        while N % p == 0:           # N % p == 0 이라는건 p가 N의 소인수라는 뜻
-            N /= p                  # N을 p로 나눈다. 99를 기준으로 99 -> 33 --> 11 됌                          
-        # N값은 지속적으로 작아지지만 최상단의 for문의 범위에는 영향이 없다.
 
-print(N, result)
-# 반복문을 거친 결과, N의 값은 1보다 큰 소수가 될 수 있다.
-if N > 1:                       # 그럴 경우, 
-    result -= result / N        # 99기준 result는 66, N은 11이다. 66이하로 11의 배수는 6개가 있으니 이를 빼준다.
+mgcd = gcd(a, b)        # 최대공약수를 구해옴
 
-print(int(result))
+if c % mgcd != 0:       # c가 최대공약수로 안 나뉘어지면 불가능 리턴
+    print(-1)
+else:
+    mok = int(c / mgcd)               # mok은 C/최.공
+    ret = Execute(a, b)
+    print(ret[0] * mok, end = ' ')
+    print(ret[1] * mok)
+
 
 '''
-코드는 짧지만 원리는 어렵다.
-그냥 외우는게 나을지도.
 
 '''
