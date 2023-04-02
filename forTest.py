@@ -1,32 +1,69 @@
-import sys
-sys.setrecursionlimit(10**6)        # 최대 재귀 깊이를 설정하는것, 기본적으로 1000번까지만 재귀하지만 여기선 더 깊게 설정한다.
-input = sys.stdin.readline
+# 임포트
+from sys import stdin
+input = stdin.readline
 
-N = int(input())            # 노드 개수를 입력 받음
+# 필요한건 다음과 같다.
+# 노드에 대한 정의
+# 트라이에 대한 정의
+# 트라이에서, 문자열을 추가
+# 트라이에서, 문자열을 찾기
 
-visited = [False] * (N + 1)             # 방문 여부 리스트, 0번은 안 쓰고 False로 체운다.
-tree = [[]for _ in range(N + 1)]        # 노드 수 + 1개만큼 배열안의 배열을 만듦
+# 노드 클래스
+class Node(object):
+    def __init__(self, isEnd):
+        self.isEnd = isEnd
+        self.childNode={}
 
-answer = [0] * (N + 1)                  # 정답 리스트, [0, 0, 0, 0......] 형태로 만듦
+# 트라이 클래스
+class Trie(object):
+    def __init__(self):
+        self.parent = Node(None)
 
-for _ in range(1, N):
-    n1, n2 = map(int, input().split())  # 노드 연결 정보를 입력 받아서
-    tree[n1].append(n2)                 # n1번에 n2를, n2번에 n1값을 넣는다.
-    tree[n2].append(n1)                 # 이건 방향이 없기 때문에, 2차원 배열이 대각선 대칭이 되기 때문이다.
+    # 문자열 삽입
+    def insert(self, string):                             
+        nowNode = self.parent   
+        temp_length = 0
+        for char in string:
+            if char in string:
+                if  char not in nowNode.childNode:
+                    nowNode.childNode[char] = Node(char)
+                
+                nowNode = nowNode.childNode[char]
+                temp_length += 1
+                if temp_length == len(string):
+                    nowNode.isEnd = True
+                    
+    # 문자가 존재하는지 검색
+    def search(self, string):                               
+        nowNode = self.parent
+        temp_length = 0
+        for char in string:
+            if char in nowNode.childNode:
+                nowNode = nowNode.childNode[char]
+                temp_length += 1
+                if temp_length == len(string) and nowNode.isEnd == True:
+                    return True
+                else:
+                    return False
+            return False
+        
+# 입력을 받음
+N, M = map(int , input().split())
+myTrie = Trie()
 
-# DFS 함수
-def DFS(number):                        # 재귀 형태로 찾음
-    visited[number] = True
-    for i in tree[number]:
-        if not visited[i]:
-            answer[i] = number
-            DFS(i)
+for _ in range(N):
+    word = input().strip()
+    myTrie.insert(word)
 
-DFS(1)                                  # DFS 탐색 시작
+result = 0
 
-# 출력
-for i in range(2, N+1):
-    print(answer[i])
+for _ in range(M):
+    word = input().strip()
+    if myTrie.search(word):
+        result += 1
+
+print(result)
+
 
 '''
 
