@@ -2,44 +2,18 @@
 import sys
 input = sys.stdin.readline
 
-# 노드 수를 입력받고 tree작성을 준비함
-N = int(input())
-tree = {}   # 딕셔너리 자료형, 입력예시기준으로 {'A': ['B', 'C'], 'B': ['D', '.']...} 이런 식으로 작성
+# 숫자 두 개를 입력 받는다.
+N, K =map(int, input().split())
 
-# 트리 관계 입력받음, 루트, 왼쪽, 오른쪽 이런식으로
-for _ in range(N):
-    root, left, right = input().split()
-    tree[root] = [left, right]
+D = [[0 for j in range(N+1)] for i in range(N + 1)] # N X N 크기의 2차원 리스트 D를 생성
 
-# 중간 왼쪽 오른쪽 (전위 순회)
-def preOrder(now):
-    if now == '.':
-        return
-    print(now, end= '')         # 순회중인 노드를 출력한다. 줄바꿈을 하지 않음
+for i in range(0, N+1):
+    D[i][1] = i     # 2차원 리스트 첫 가로줄의 값을 0, 1, 2, 3, 4....로 함
+    D[i][0] = 1     # 2차원 리스트 
+    D[i][i] = 1
 
-    preOrder(tree[now][0])      # 왼쪽 먼저
-    preOrder(tree[now][1])      # 왼쪽이 끝나면 오른쪽
+for i in range(2, N+1):
+    for j in range(1, i):
+        D[i][j] = D[i-1][j] + D[i - 1][j-1]
 
-# 왼쪽 중간 오른쪽
-def inOrder(now):
-    if now == '.':
-        return
-    inOrder(tree[now][0])
-    print(now, end= '')
-    inOrder(tree[now][1])
-
-# 왼쪽 오른쪽 중간
-def postOrder(now):
-    if now == '.':
-        return
-    postOrder(tree[now][0])
-    postOrder(tree[now][1])
-    print(now, end= '')
-
-print(tree)
-preOrder('A')
-print()
-inOrder('A')
-print()
-postOrder('A')
-
+print(D[N][K])
