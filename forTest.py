@@ -2,30 +2,18 @@
 import sys
 input = sys.stdin.readline
 
-# 데이터 입력
-N =int(input())
+# 좌표 포인트를 입력 받음
+x1, y1 = map(int, input.split())
+x2, y2 = map(int, input.split())
+x3, y3 = map(int, input.split())
 
-# 리스트 준비
-# DP(Dynamic Programming) 테이블은 동적 계획법 알고리즘에서 사용되는 테이블로
-# 이전에 계산된 결과를 저장하여 중복된 계산을 피하고, 최적화된 해결 방법을 찾는 데 사용
-D = [-1]*(N+1)
-D[0] = 0
-D[1] = 1        # D는 0번 인덱스와 1번 인덱스를 제외한 모든 요소가 -1로 이루어진다.
-                # [0, 1, -1, -1, -1, -1, -1......]
-                # -1은 계산이 아직 안 되었다는 뜻이다.
+# CCW 공식을 그대로 사용
+result = (x1 * y2 + x2 * y3 + x3 * y1) - (x2 * y1 + x3 * y2 + x1 * y3)
 
-# 피보나치 함수
-def fibo(n):
-    if D[n] != -1:      # 이미 계산을 했었던 부분의 문제는 즉시리턴
-        return D[n]
-    # 메모이제이션 : 구한 값을 바로 리턴하지 않고 DP 테이블에 저장한 후 리턴하도록 로직 구현
-    D[n] = fibo(n-2) + fibo(n-1) # 자기 앞앞칸과 앞칸의 값을 더한 것을 자기 값으로 함
-    return D[n]
-
-fibo(N)
-
-print(D[N])
-
-
-'''
-'''
+# 양수면 시계방향, 음수면 반 시계방향, 0이면 직선이다.
+if result > 0:
+    print(1)   
+elif result < 0:
+    print(-1)
+else:
+    print(0)
