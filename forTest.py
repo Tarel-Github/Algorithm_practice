@@ -19,7 +19,7 @@ def fibo(n):
     if D[n] != -1:      # 이미 계산을 했었던 부분의 문제는 즉시리턴
         return D[n]
     # 메모이제이션 : 구한 값을 바로 리턴하지 않고 DP 테이블에 저장한 후 리턴하도록 로직 구현
-    D[n] = fibo(n-2) + fibo(n-1)
+    D[n] = fibo(n-2) + fibo(n-1) # 자기 앞앞칸과 앞칸의 값을 더한 것을 자기 값으로 함
     return D[n]
 
 fibo(N)
