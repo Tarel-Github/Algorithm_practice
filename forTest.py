@@ -1,46 +1,19 @@
-# 임포트
-import sys
-input = sys.stdin.readline
+n = int(input())
+count = 1           # 리턴해야할 값, 총 몇 종류가 나오는가?
+start_index = 1
+end_index = 1
+sum = 1             # 더하는 값 저장
 
-# n은 숫자 개수, m은 나누어 떨어져야 하는 수
-# A 는 리스트를 입력 받음
-n, m = map(int, input().split())
-A = list(map(int, input().split()))
+while end_index != n:
+    if sum == n:        # 정답인 경우
+        count += 1
+        end_index += 1
+        sum += end_index
+    elif sum > n:       # 두 포인터 사이 값을 전부 더했을 때, n보다 크다면
+        sum -= start_index  # 
+        start_index += 1    # 스타트 값을 올린다.
+    else:               # 두 포인터 사이 값이 n보다 작다면(초반부에 주로 발생)
+        end_index += 1
+        sum += end_index
 
-# 합배열을 준비, C는 답안 배열
-# C의 경우, 나머지가 몇개인지 저장하는 배열이다.
-# 예를 들어, 3으로 나눈 나머지는 0, 1, 2 가 될 수 있다.
-S = [0] * n
-C = [0] * m
-
-S[0] = A [0]
-answer = 0
-
-# 합배열인 S를 완성하기, A리스트에서 하나씩 더해와서 합배열을 구성
-for i in range(1, n):
-    S[i]= S[i-1] + A[i]
-
-# 합배열 S의 각 요소를 m으로 나눈 값의 나머지를 remainder에 저장
-# 그리하여 나누어 떨어진다면 C배열의 나머지값 인덱스 값을 1 늘린다.
-# 예를 들어 3으로 나눈 나머지가 2라면 C[2]의 값을 1 늘리는 식이다.
-# 이런식으로, 합배열 값들을 나누었을 때 발생할 수 있는 모든 나머지가 각각 몇 개인지 저장할 수 있다.
-for i in range(n):
-    remainder = S[i] % m        # 나머지값은 remainder
-    if remainder == 0:          
-        answer += 1
-    C[remainder] += 1
-# 위 포문은 배열 C를 완성하고, 합배열 S를 기준으로 m으로 나누어 떨어지는 숫자가 몇 개인지를 구한다.
-# 합배열 S값은 1 3 6 7 9 이므로 3, 6, 9총 3개다.
-# 배열 C의 값은 3, 2, 0 이다.
-
-# 먼저, 나머지가 없는 것은 3개, 나머지가 1인 것 하나다.
-for i in range(m):
-    if C[i] > 1:    # C[i] 값이 2인 경우 부터 시작
-        answer += (C[i] * (C[i]-1) // 2 )
-
-
-# 결과적으로, 합배열을 기준으로, 값 그 자체가 나누어 떨어지는 것은 3개이며
-# 값 그 자체를 제외하고, 나머지가 0인 값들 간의 구간합이 나누어 떨어지는 것은 3개이며
-# 나머지가 1인 값들 간의 구간합이 나누어 떨어지는 경우가 1개이며
-# 나머지가 2인 값들 간의 구간합이 나누어 떨어지는 경우는 0개이다.
-print(answer)
+print(count)
